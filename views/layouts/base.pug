@@ -1,0 +1,70 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Notas
+    link(rel="icon" href="/images/notas.png")
+
+    link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/css/style.css')
+    script(src='/bootstrap/js/bootstrap.min.js')
+
+    link(rel='stylesheet', href='/simditor/styles/simditor.css')
+
+    script(src='/simditor/site/assets/scripts/jquery.min.js')
+    script(src='/simditor/site/assets/scripts/module.js')
+    script(src='/simditor/site/assets/scripts/hotkeys.js')
+    script(src='/simditor/site/assets/scripts/uploader.js')
+    script(src='/simditor/lib/simditor.js')
+
+    link(rel='stylesheet', href='/toastr/toastr.css')
+    script(src='/toastr/toastr.min.js')
+
+  body
+    nav(class='navbar navbar-expand-lg navbar-dark bg-primary')
+      div(class='container-fluid')
+        a(class='navbar-brand',href='#') Notas
+        button(class='navbar-toggler',type='button',data-bs-toggle='collapse', data-bs-target='#navbarColor01',aria-controls='navbarColor01',aria-expanded='false', aria-label='Toggle navigation')
+            span(class='navbar-toggler-icon')
+
+    div(class='container-fluid',style='margin-top: 50px')
+      block content
+      
+      script.
+
+        $(document).ready( function() {
+
+          $('#btnGuardar').click(function(e){  
+
+            e.preventDefault();
+
+            $.ajax({ 
+              url: '/guardar',
+              type: 'POST',
+              cache: false, 
+              data: { contenido : editor.getValue() }, 
+              success: function(data){
+                toastr.success('Contenido guardado');
+              }
+              ,error: function(jqXHR, textStatus, err){
+                toastr.error('Ocurrio un error guardando contenido');
+                console.log(textStatus);
+                console.log(err);
+              }
+            });
+            
+          });  
+
+          Simditor.locale = 'en-US';
+          var editor = new Simditor({
+              textarea: $('#editor'),
+              toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', 'fontScale', 'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'image', 'hr', '|', 'indent', 'outdent', 'alignment'],
+              mobileToolbar : ["bold", "underline", "strikethrough", "color", "ul", "ol"]
+          });
+
+
+          var objBarra = document.getElementById("barra");
+          objBarra.scrollTop = objBarra.scrollHeight;
+
+        });

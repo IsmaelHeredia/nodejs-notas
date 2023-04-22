@@ -1,0 +1,13 @@
+extends ../layouts/base
+
+block content
+
+    div(id="barra" style="overflow-y: scroll; height:700px;")
+        textarea(id="editor" autofocus) #{contenido}
+
+    br
+
+    div(class="container")
+        div(class="row")
+            div(class="col text-center")
+                button(id="btnGuardar" name="btnGuardar" class="btn btn-primary") Guardar
